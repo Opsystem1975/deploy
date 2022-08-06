@@ -27,6 +27,5 @@ services:
     restart: always
     environment:
       - VIRTUAL_HOST=opsystem-portal.ddns.net
-Active
     volumes:
       - /volumes/www/erp:/usr/local/apache2/htdocs
