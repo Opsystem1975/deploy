@@ -19,7 +19,7 @@ services:
     environment:
       - VIRTUAL_HOST=opsystem-erp.ddns.net
     volumes:
-      - /storage/nginx/portal:/usr/share/nginx/html:ro
+      - /volumes/www/portal:/usr/share/nginx/html:ro
 
   erp:
     image: httpd
@@ -29,4 +29,4 @@ services:
       - VIRTUAL_HOST=opsystem-portal.ddns.net
 Active
     volumes:
-      - /storage/apache/erp:/usr/local/apache2/htdocs
+      - /volumes/www/erp:/usr/local/apache2/htdocs
