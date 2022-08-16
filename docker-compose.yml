@@ -29,3 +29,12 @@ services:
       - VIRTUAL_HOST=opsystem-erp.ddns.net
     volumes:
       - /volumes/www/erp:/usr/local/apache2/htdocs
+      
+  factura:
+    image: nginx
+    container_name: factura
+    restart: always
+    environment:
+      - VIRTUAL_HOST=opsystem-factura.ddns.net
+    volumes:
+      - /volumes/www/factura:/usr/share/nginx/html:ro
