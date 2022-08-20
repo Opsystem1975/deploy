@@ -10,8 +10,8 @@ services:
       - 80:80
       - 443:443
     volumes:
-      - /volumes/nginx/config/settings.conf:/etc/nginx/conf.d/custom_settings.conf:ro
-
+      - /volumes/run/docker.sock:/tmp/docker.sock:ro
+      
   portal:
     image: nginx
     container_name: Portal
