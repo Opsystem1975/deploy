@@ -24,7 +24,7 @@ lets-encrypt:
   restart: always
   environment:
     - NGINX_PROXY_CONTAINER=Reverse-Proxy
-   volumes:
+  volumes:
     - /volumes/nginx/certs:/etc/nginx/certs
     - /volumes/nginx/vhostd:/etc/nginx/vhost.d
     - /volumes/nginx/html:/usr/share/nginx/html:rw
