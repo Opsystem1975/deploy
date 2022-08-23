@@ -3,38 +3,64 @@ version: '3.1'
 services:
 
   reverse-proxy:
-    image: jwilder/nginx-proxy:alpine
+    image: nginxproxy/nginx-proxy:alpine
     container_name: Reverse-Proxy
     restart: always
     ports:
       - 80:80
       - 443:443
+    environment:
+      - VIRTUAL_HOST=opsystem-apps.ddns.net
+      - VIRTUAL_PATH=/.well-know
     volumes:
+      - /volumes/nginx/certs:/etc/nginx/certs:ro
+      - /volumes/nginx/vhostd:/etc/nginx/vhost.d
+      - /volumes/nginx/html:/usr/share/nginx/html:rw
       - /var/run/docker.sock:/tmp/docker.sock:ro
-      
+  
+lets-encrypt:
+  image: jrcs/letsencrypt-nginx-proxy-companion
+  container_name: 'Lets-Encrypt'
+  restart: always
+  environment:
+    - NGINX_PROXY_CONTAINER=Reverse-proxy
+   volumes:
+    - /volumes/nginx/certs:/etc/nginx/certs
+    - /volumes/nginx/vhostd:/etc/nginx/vhost.d
+    - /volumes/nginx/html:/usr/share/nginx/html:rw
+    - /var/run/docker.sock:/var/run/docker.sock:ro
+  
   portal:
     image: nginx
-    container_name: Portal
     restart: always
     environment:
-      - VIRTUAL_HOST=opsystem-portal.ddns.net
+      - VIRTUAL_HOST=opsystem-apps.ddns.net
+      - VIRTUAL_PATH=/
+      - LETSENCRYPT_HOST=opsystem-apps.ddns.net
+      - LETSENCRYPT_EMAIL=octaviox75@gmail.com
     volumes:
       - /volumes/www/portal:/usr/share/nginx/html:ro
 
   erp:
     image: httpd
-    container_name: ERP
     restart: always
     environment:
       - VIRTUAL_HOST=opsystem-erp.ddns.net
+      - VIRTUAL_PATH=/erp
+      - VIRTUAL_DEST=/
+      - LETSENCRYPT_HOST=opsystem-apps.ddns.net
+      - LETSENCRYPT_EMAIL=octaviox75@gmail.com
     volumes:
       - /volumes/www/erp:/usr/local/apache2/htdocs
-      
+  
   factura:
     image: nginx
-    container_name: factura
     restart: always
     environment:
       - VIRTUAL_HOST=opsystem-factura.ddns.net
+      - VIRTUAL_PATH=/factura
+      - VIRTUAL_DEST=/
+      - LETSENCRYPT_HOST=opsystem-apps.ddns.net
+      - LETSENCRYPT_EMAIL=octaviox75@gmail.com
     volumes:
       - /volumes/www/factura:/usr/share/nginx/html:ro
